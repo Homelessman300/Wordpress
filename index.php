@@ -4,8 +4,7 @@
 		<title>GreenTech Solutions</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/sass/main.css" />
-	</head>
+<link rel="stylesheet" href="<?php echo esc_url( get_stylesheet_uri() ); ?>" type="text/css" />	</head>
 	<body class="is-preload">
 
 		<!-- Wrapper -->
