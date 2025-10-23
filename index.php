@@ -9,19 +9,19 @@
     <article class="post">
         <header>
             <div class="title">
-                <h2><a href="single.html">Magna sed adipiscing</a></h2>
+                <h2><a href="<?php echo esc_url( get_permalink() ); ?>"><?php echo esc_html( get_the_title() ? get_the_title() : 'Magna sed adipiscing' ); ?></a></h2>
                 <p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
             </div>
             <div class="meta">
                 <time class="published" datetime="2015-11-01">November 1, 2015</time>
-                <a href="#" class="author"><span class="name">Jane Doe</span><img src="images/avatar.jpg" alt="" /></a>
+                <a href="#" class="author"><span class="name">Jane Doe</span><img src="<?php echo esc_url( get_theme_file_uri('images/avatar.jpg') ); ?>" alt="" /></a>
             </div>
         </header>
-        <a href="single.html" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+    <a href="<?php echo esc_url( get_permalink() ); ?>" class="image featured"><img src="<?php echo esc_url( get_theme_file_uri('images/pic01.jpg') ); ?>" alt="" /></a>
         <p>Mauris neque quam, fermentum ut nisl vitae...</p>
         <footer>
             <ul class="actions">
-                <li><a href="single.html" class="button large">Continue Reading</a></li>
+                <li><a href="<?php echo esc_url( get_permalink() ); ?>" class="button large">Continue Reading</a></li>
             </ul>
             <ul class="stats">
                 <li><a href="#">General</a></li>
