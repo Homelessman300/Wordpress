@@ -1,22 +1,28 @@
 <!DOCTYPE HTML>
-<html>
+<html <?php language_attributes(); ?>>
 <head>
+    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title><?php bloginfo('name'); ?><?php wp_title('|'); ?></title>
+    <?php wp_head(); ?>
+    <head>
     <title>GreenTech Solutions</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="<?php 
         $href = function_exists('get_stylesheet_uri') ? get_stylesheet_uri() : 'style.css'; 
         echo function_exists('esc_url') ? esc_url($href) : $href; 
     ?>" type="text/css" />
 </head>
-<body class="is-preload">
+<body <?php body_class('is-preload'); ?>>
 
 <!-- Wrapper -->
 <div id="wrapper">
 
     <!-- Header -->
     <header id="header">
-        <a href="<?php echo esc_url(home_url('/')); ?>"><img src="<?php echo esc_url(get_theme_file_uri('images/logo.svg')); ?>" alt="GreenTech Solutions" class="logo" /></a>
+        <a href="<?php echo esc_url(home_url('/')); ?>">
+            <img src="<?php echo esc_url(get_theme_file_uri('images/logo.svg')); ?>" alt="<?php bloginfo('name'); ?>" class="logo" />
+        </a>
         <nav class="links">
             <ul>
                 <li><a href="#">Lorem</a></li>
@@ -30,8 +36,8 @@
             <ul>
                 <li class="search">
                     <a class="fa-search" href="#search">Search</a>
-                    <form id="search" method="get" action="#">
-                        <input type="text" name="query" placeholder="Search" />
+                    <form id="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+                        <input type="text" name="s" placeholder="Search" />
                     </form>
                 </li>
                 <li class="menu">
@@ -43,49 +49,24 @@
 
     <!-- Menu -->
     <section id="menu">
-
-        <!-- Search -->
         <section>
-            <form class="search" method="get" action="#">
-                <input type="text" name="query" placeholder="Search" />
+            <form class="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+                <input type="text" name="s" placeholder="Search" />
             </form>
         </section>
 
-        <!-- Links -->
         <section>
             <ul class="links">
-                <li>
-                    <a href="#">
-                        <h3>Lorem ipsum</h3>
-                        <p>Feugiat tempus veroeros dolor</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <h3>Dolor sit amet</h3>
-                        <p>Sed vitae justo condimentum</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <h3>Feugiat veroeros</h3>
-                        <p>Phasellus sed ultricies mi congue</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <h3>Etiam sed consequat</h3>
-                        <p>Porta lectus amet ultricies</p>
-                    </a>
-                </li>
+                <li><a href="#"><h3>Lorem ipsum</h3><p>Feugiat tempus veroeros dolor</p></a></li>
+                <li><a href="#"><h3>Dolor sit amet</h3><p>Sed vitae justo condimentum</p></a></li>
+                <li><a href="#"><h3>Feugiat veroeros</h3><p>Phasellus sed ultricies mi congue</p></a></li>
+                <li><a href="#"><h3>Etiam sed consequat</h3><p>Porta lectus amet ultricies</p></a></li>
             </ul>
         </section>
 
-        <!-- Actions -->
         <section>
             <ul class="actions stacked">
                 <li><a href="#" class="button large fit">Log In</a></li>
             </ul>
         </section>
-
     </section>

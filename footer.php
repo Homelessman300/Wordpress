@@ -1,4 +1,6 @@
-</div> <!-- End Wrapper -->
+  <!-- Footer -->
+ 
+</section>
 
 <?php wp_footer(); ?>
 </body>
