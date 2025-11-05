@@ -3,40 +3,81 @@
 <!-- Main -->
 <div id="main">
 
-    <!-- Full original posts and articles -->
-    <?php // Paste all <article> sections from your original HTML below ?>
+    <?php
+    // Custom Query - change args as needed
+    $args = array(
+        'post_type' => 'post',
+        'posts_per_page' => 5,
+        'paged' => get_query_var('paged') ? get_query_var('paged') : 1,
+    );
 
-    <article class="post">
-        <header>
-            <div class="title">
-                <h2><a href="<?php echo esc_url( get_permalink() ); ?>"><?php echo esc_html( get_the_title() ? get_the_title() : 'Magna sed adipiscing' ); ?></a></h2>
-                <p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
-            </div>
-            <div class="meta">
-                <time class="published" datetime="2015-11-01">November 1, 2015</time>
-                <a href="#" class="author"><span class="name">Jane Doe</span><img src="<?php echo esc_url( get_theme_file_uri('images/avatar.jpg') ); ?>" alt="" /></a>
-            </div>
-        </header>
-    <a href="<?php echo esc_url( get_permalink() ); ?>" class="image featured"><img src="<?php echo esc_url( get_theme_file_uri('images/pic01.jpg') ); ?>" alt="" /></a>
-        <p>Mauris neque quam, fermentum ut nisl vitae...</p>
-        <footer>
-            <ul class="actions">
-                <li><a href="<?php echo esc_url( get_permalink() ); ?>" class="button large">Continue Reading</a></li>
-            </ul>
-            <ul class="stats">
-                <li><a href="#">General</a></li>
-                <li><a href="#" class="icon solid fa-heart">28</a></li>
-                <li><a href="#" class="icon solid fa-comment">128</a></li>
-            </ul>
-        </footer>
-    </article>
+    $query = new WP_Query($args);
 
-    <!-- Add all other <article> posts and the commented “Elements” section here as in your original file -->
+    if ($query->have_posts()) :
+        while ($query->have_posts()) : $query->the_post();
+            // Featured image or fallback
+            if ( has_post_thumbnail() ) {
+                $featured_img = get_the_post_thumbnail( get_the_ID(), 'featured-rectangular', array('class'=>'image featured') );
+            } else {
+                $fallback = esc_url( get_theme_file_uri('images/pic01.jpg') ); // change fallback per post if needed
+                $featured_img = '<a href="' . get_permalink() . '" class="image featured"><img src="' . $fallback . '" alt="' . esc_attr(get_the_title()) . '" /></a>';
+            }
+    ?>
+        <article class="post">
+            <header>
+                <div class="title">
+                    <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                    <p><?php echo esc_html( get_the_excerpt() ); ?></p>
+                </div>
+                <div class="meta">
+                    <time class="published" datetime="<?php echo get_the_date('c'); ?>">
+                        <?php echo get_the_date(); ?>
+                    </time>
+                    <a href="<?php echo esc_url( get_author_posts_url(get_the_author_meta('ID')) ); ?>" class="author">
+                        <span class="name"><?php the_author(); ?></span>
+                        <img src="<?php echo esc_url( get_avatar_url( get_the_author_meta('ID'), array('size'=>45) ) ); ?>" alt="<?php echo esc_attr( get_the_author() ); ?>" />
+                    </a>
+                </div>
+            </header>
+
+            <?php
+            // If we already built $featured_img as an <a> (fallback), echo it. If it's the_post_thumbnail markup, ensure it links to permalink.
+            if ( strpos( $featured_img, 'class="image featured"' ) !== false ) {
+                // $featured_img already contains the full <a><img> (fallback case)
+                echo $featured_img;
+            } else {
+                // has_post_thumbnail() case - wrap thumbnail in permalink anchor and add class
+                ?>
+                <a href="<?php the_permalink(); ?>" class="image featured"><?php the_post_thumbnail('featured-rectangular'); ?></a>
+                <?php
+            }
+            ?>
+
+            <p><?php echo wp_trim_words( get_the_content(), 30, '...' ); ?></p>
+
+            <footer>
+                <ul class="actions">
+                    <li><a href="<?php the_permalink(); ?>" class="button large">Continue Reading</a></li>
+                </ul>
+                <ul class="stats">
+                    <li><?php the_category(', '); ?></li>
+                    <li><a href="<?php comments_link(); ?>" class="icon solid fa-comment"><?php comments_number('0','1','%'); ?></a></li>
+                </ul>
+            </footer>
+        </article>
+
+    <?php
+        endwhile;
+        wp_reset_postdata();
+    else :
+        echo '<p>No posts found.</p>';
+    endif;
+    ?>
 
     <!-- Pagination -->
     <ul class="actions pagination">
-        <li><a href="#" class="disabled button large previous">Previous Page</a></li>
-        <li><a href="#" class="button large next">Next Page</a></li>
+        <li><?php previous_posts_link('&laquo; Previous Page'); ?></li>
+        <li><?php next_posts_link('Next Page &raquo;', $query->max_num_pages); ?></li>
     </ul>
 
 </div>
@@ -52,103 +93,86 @@
         </header>
     </section>
 
-    <!-- Mini Posts -->
+    <!-- Mini Posts (most recent 4) -->
     <section>
         <div class="mini-posts">
-            <!-- Mini Post -->
-            <article class="mini-post">
-                <header>
-                    <h3><a href="<?php echo esc_url(get_permalink()); ?>">Vitae sed condimentum</a></h3>
-                    <time class="published" datetime="2015-10-20">October 20, 2015</time>
-                    <a href="#" class="author"><img src="<?php echo esc_url(get_theme_file_uri('images/avatar.jpg')); ?>" alt="" /></a>
-                </header>
-                <a href="<?php echo esc_url(get_permalink()); ?>" class="image"><img src="<?php echo esc_url(get_theme_file_uri('images/pic04.jpg')); ?>" alt="" /></a>
-            </article>
-
-            <article class="mini-post">
-                <header>
-                    <h3><a href="<?php echo esc_url(get_permalink()); ?>">Rutrum neque accumsan</a></h3>
-                    <time class="published" datetime="2015-10-19">October 19, 2015</time>
-                    <a href="#" class="author"><img src="<?php echo esc_url(get_theme_file_uri('images/avatar.jpg')); ?>" alt="" /></a>
-                </header>
-                <a href="<?php echo esc_url(get_permalink()); ?>" class="image"><img src="<?php echo esc_url(get_theme_file_uri('images/pic05.jpg')); ?>" alt="" /></a>
-            </article>
-
-            <article class="mini-post">
-                <header>
-                    <h3><a href="<?php echo esc_url(get_permalink()); ?>">Odio congue mattis</a></h3>
-                    <time class="published" datetime="2015-10-18">October 18, 2015</time>
-                    <a href="#" class="author"><img src="<?php echo esc_url(get_theme_file_uri('images/avatar.jpg')); ?>" alt="" /></a>
-                </header>
-                <a href="<?php echo esc_url(get_permalink()); ?>" class="image"><img src="<?php echo esc_url(get_theme_file_uri('images/pic06.jpg')); ?>" alt="" /></a>
-            </article>
-
-            <article class="mini-post">
-                <header>
-                    <h3><a href="<?php echo esc_url(get_permalink()); ?>">Enim nisl veroeros</a></h3>
-                    <time class="published" datetime="2015-10-17">October 17, 2015</time>
-                    <a href="#" class="author"><img src="<?php echo esc_url(get_theme_file_uri('images/avatar.jpg')); ?>" alt="" /></a>
-                </header>
-                <a href="<?php echo esc_url(get_permalink()); ?>" class="image"><img src="<?php echo esc_url(get_theme_file_uri('images/pic07.jpg')); ?>" alt="" /></a>
-            </article>
+            <?php
+            $mini_args = array(
+                'post_type' => 'post',
+                'posts_per_page' => 4,
+            );
+            $mini_query = new WP_Query($mini_args);
+            if ($mini_query->have_posts()) :
+                while ($mini_query->have_posts()) : $mini_query->the_post();
+                    // thumbnail or fallback
+                    if ( has_post_thumbnail() ) {
+                        $thumb = get_the_post_thumbnail( get_the_ID(), 'mini-rectangular' );
+                    } else {
+                        $thumb_img = esc_url( get_theme_file_uri('images/avatar.jpg') );
+                        $thumb = '<img src="' . $thumb_img . '" alt="' . esc_attr(get_the_title()) . '" />';
+                    }
+            ?>
+                <article class="mini-post">
+                    <header>
+                        <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                        <time class="published" datetime="<?php echo get_the_date('c'); ?>"><?php echo get_the_date(); ?></time>
+                        <a href="<?php echo esc_url( get_author_posts_url(get_the_author_meta('ID')) ); ?>" class="author">
+                            <img src="<?php echo esc_url( get_avatar_url( get_the_author_meta('ID'), array('size'=>48) ) ); ?>" alt="<?php echo esc_attr( get_the_author() ); ?>" />
+                        </a>
+                    </header>
+                    <a href="<?php the_permalink(); ?>" class="image"><?php echo $thumb; ?></a>
+                </article>
+            <?php
+                endwhile;
+                wp_reset_postdata();
+            else :
+                echo '<p>No mini posts.</p>';
+            endif;
+            ?>
         </div>
     </section>
 
-    <!-- Posts List -->
+    <!-- Posts List (with thumbnails) -->
     <section>
         <ul class="posts">
-            <li>
-                <article>
-                    <header>
-                        <h3><a href="<?php echo esc_url(get_permalink()); ?>">Lorem ipsum fermentum ut nisl vitae</a></h3>
-                        <time class="published" datetime="2015-10-20">October 20, 2015</time>
-                    </header>
-                    <a href="<?php echo esc_url(get_permalink()); ?>" class="image"><img src="<?php echo esc_url(get_theme_file_uri('images/pic08.jpg')); ?>" alt="" /></a>
-                </article>
-            </li>
-            <li>
-                <article>
-                    <header>
-                        <h3><a href="<?php echo esc_url(get_permalink()); ?>">Convallis maximus nisl mattis nunc id lorem</a></h3>
-                        <time class="published" datetime="2015-10-15">October 15, 2015</time>
-                    </header>
-                    <a href="<?php echo esc_url(get_permalink()); ?>" class="image"><img src="<?php echo esc_url(get_theme_file_uri('images/pic09.jpg')); ?>" alt="" /></a>
-                </article>
-            </li>
-            <li>
-                <article>
-                    <header>
-                        <h3><a href="<?php echo esc_url(get_permalink()); ?>">Euismod amet placerat vivamus porttitor</a></h3>
-                        <time class="published" datetime="2015-10-10">October 10, 2015</time>
-                    </header>
-                    <a href="<?php echo esc_url(get_permalink()); ?>" class="image"><img src="<?php echo esc_url(get_theme_file_uri('images/pic10.jpg')); ?>" alt="" /></a>
-                </article>
-            </li>
-            <li>
-                <article>
-                    <header>
-                        <h3><a href="<?php echo esc_url(get_permalink()); ?>">Magna enim accumsan tortor cursus ultricies</a></h3>
-                        <time class="published" datetime="2015-10-08">October 8, 2015</time>
-                    </header>
-                    <a href="<?php echo esc_url(get_permalink()); ?>" class="image"><img src="<?php echo esc_url(get_theme_file_uri('images/pic11.jpg')); ?>" alt="" /></a>
-                </article>
-            </li>
-            <li>
-                <article>
-                    <header>
-                        <h3><a href="<?php echo esc_url(get_permalink()); ?>">Congue ullam corper lorem ipsum dolor</a></h3>
-                        <time class="published" datetime="2015-10-06">October 7, 2015</time>
-                    </header>
-                    <a href="<?php echo esc_url(get_permalink()); ?>" class="image"><img src="<?php echo esc_url(get_theme_file_uri('images/pic12.jpg')); ?>" alt="" /></a>
-                </article>
-            </li>
+            <?php
+            $list_args = array(
+                'post_type' => 'post',
+                'posts_per_page' => 5,
+            );
+            $list_query = new WP_Query($list_args);
+            if ($list_query->have_posts()) :
+                while ($list_query->have_posts()) : $list_query->the_post();
+                    if ( has_post_thumbnail() ) {
+                        $small_thumb = get_the_post_thumbnail( get_the_ID(), 'sidebar-thumb' );
+                    } else {
+                        $small_fallback = esc_url( get_theme_file_uri('images/pic08.jpg') );
+                        $small_thumb = '<img src="' . $small_fallback . '" alt="' . esc_attr(get_the_title()) . '" />';
+                    }
+            ?>
+                <li>
+                    <article>
+                        <header>
+                            <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                            <time class="published" datetime="<?php echo get_the_date('c'); ?>"><?php echo get_the_date(); ?></time>
+                        </header>
+                        <a href="<?php the_permalink(); ?>" class="image"><?php echo $small_thumb; ?></a>
+                    </article>
+                </li>
+            <?php
+                endwhile;
+                wp_reset_postdata();
+            else :
+                echo '<li>No posts available.</li>';
+            endif;
+            ?>
         </ul>
     </section>
 
     <!-- About -->
     <section class="blurb">
         <h2>About</h2>
-        <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod amet placerat.</p>
+        <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl...</p>
         <ul class="actions">
             <li><a href="#" class="button">Learn More</a></li>
         </ul>
