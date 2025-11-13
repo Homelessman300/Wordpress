@@ -30,4 +30,25 @@ function greentech_enqueue_assets() {
 add_action('wp_enqueue_scripts', 'greentech_enqueue_assets');
 
 // -----------------------------
+
+// Register theme menus and widget areas
+function greentech_setup() {
+    register_nav_menus( array(
+        'primary' => __( 'Primary Menu', 'greentech' ),
+    ) );
+}
+add_action( 'after_setup_theme', 'greentech_setup' );
+
+function greentech_widgets_init() {
+    register_sidebar( array(
+        'name'          => __( 'Primary Sidebar', 'greentech' ),
+        'id'            => 'primary-sidebar',
+        'description'   => __( 'Widgets in this area will be shown in the primary sidebar.', 'greentech' ),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h3 class="widget-title">',
+        'after_title'   => '</h3>',
+    ) );
+}
+add_action( 'widgets_init', 'greentech_widgets_init' );
 //

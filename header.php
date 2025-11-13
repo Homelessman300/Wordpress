@@ -1,37 +1,59 @@
 <!DOCTYPE HTML>
 <html <?php language_attributes(); ?>>
 <head>
-    <meta charset="<?php bloginfo('charset'); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <title><?php bloginfo('name'); ?><?php wp_title('|'); ?></title>
-    <?php wp_head(); ?>
-    <head>
-    <title>GreenTech Solutions</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="<?php 
+<meta charset="<?php bloginfo('charset'); ?>" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<title><?php wp_title('|', true, 'right'); bloginfo('name'); ?></title>
+<?php wp_head(); ?>
+ <link rel="stylesheet" href="<?php 
         $href = function_exists('get_stylesheet_uri') ? get_stylesheet_uri() : 'style.css'; 
         echo function_exists('esc_url') ? esc_url($href) : $href; 
     ?>" type="text/css" />
 </head>
-<body <?php body_class('is-preload'); ?>>
+<body <?php body_class(); ?>>
 
 <!-- Wrapper -->
 <div id="wrapper">
 
     <!-- Header -->
     <header id="header">
+        <!-- Logo -->
         <a href="<?php echo esc_url(home_url('/')); ?>">
-            <img src="<?php echo esc_url(get_theme_file_uri('images/logo.svg')); ?>" alt="<?php bloginfo('name'); ?>" class="logo" />
+            <img src="<?php echo get_template_directory_uri(); ?>/images/logo.svg" alt="<?php bloginfo('name'); ?>" class="logo" />
         </a>
-        <nav class="links">
-            <ul>
-                <li><a href="#">Lorem</a></li>
-                <li><a href="#">Ipsum</a></li>
-                <li><a href="#">Feugiat</a></li>
-                <li><a href="#">Tempus</a></li>
-                <li><a href="#">Adipiscing</a></li>
-            </ul>
-        </nav>
+
+<!-- Drie nieuwste posts -->
+<nav class="links">
+    <ul>
+        <?php
+        $recent_posts = new WP_Query(array(
+            'posts_per_page' => 3,
+            'post_status'    => 'publish'
+        ));
+
+        if ($recent_posts->have_posts()) :
+            while ($recent_posts->have_posts()) :
+                $recent_posts->the_post();
+                ?>
+                <li>
+                    <a href="<?php the_permalink(); ?>">
+                        <?php the_title(); ?>
+                    </a>
+                </li>
+                <?php
+            endwhile;
+            wp_reset_postdata();
+        else :
+            ?>
+            <li><a href="#">Geen recente berichten</a></li>
+            <?php
+        endif;
+        ?>
+    </ul>
+</nav>
+
+
+        <!-- Secondary navigation (main) -->
         <nav class="main">
             <ul>
                 <li class="search">
@@ -47,26 +69,49 @@
         </nav>
     </header>
 
-    <!-- Menu -->
-    <section id="menu">
-        <section>
-            <form class="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
-                <input type="text" name="s" placeholder="Search" />
-            </form>
-        </section>
+<!-- Off-canvas menu -->
+<section id="menu">
 
-        <section>
-            <ul class="links">
-                <li><a href="#"><h3>Lorem ipsum</h3><p>Feugiat tempus veroeros dolor</p></a></li>
-                <li><a href="#"><h3>Dolor sit amet</h3><p>Sed vitae justo condimentum</p></a></li>
-                <li><a href="#"><h3>Feugiat veroeros</h3><p>Phasellus sed ultricies mi congue</p></a></li>
-                <li><a href="#"><h3>Etiam sed consequat</h3><p>Porta lectus amet ultricies</p></a></li>
-            </ul>
-        </section>
-
-        <section>
-            <ul class="actions stacked">
-                <li><a href="#" class="button large fit">Log In</a></li>
-            </ul>
-        </section>
+    <!-- Search -->
+    <section>
+        <form class="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+            <input type="text" name="s" placeholder="Search" />
+        </form>
     </section>
+
+    <!-- Recent posts -->
+    <section>
+        <ul class="links">
+            <?php
+            $recent_posts = new WP_Query(array(
+                'posts_per_page' => 4, // Aantal posts dat je wilt tonen
+                'post_status' => 'publish'
+            ));
+
+            if ($recent_posts->have_posts()) :
+                while ($recent_posts->have_posts()) : $recent_posts->the_post(); ?>
+                    <li>
+                        <a href="<?php the_permalink(); ?>">
+                            <h3><?php the_title(); ?></h3>
+                            <p><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
+                        </a>
+                    </li>
+                <?php endwhile;
+                wp_reset_postdata();
+            else : ?>
+                <li>
+                    <a href="#">
+                        <h3>No posts found</h3>
+                        <p>There are currently no posts to display.</p>
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </section>
+
+</section>
+
+
+<?php wp_footer(); ?>
+</body>
+</html>
