@@ -18,7 +18,7 @@ add_theme_support('title-tag');
 function greentech_enqueue_assets() {
     // CSS
     wp_enqueue_style('fontawesome', get_template_directory_uri() . '/assets/css/fontawesome-all.min.css', array(), null);
-    wp_enqueue_style('main-style', get_template_directory_uri() . '/assets/sass/main.css', array(), null);
+    wp_enqueue_style('main-style', get_template_directory_uri() . '/assets/css/main.css', array(), null);
 
     // JS
     wp_enqueue_script('jquery');
@@ -31,14 +31,16 @@ add_action('wp_enqueue_scripts', 'greentech_enqueue_assets');
 
 // -----------------------------
 
-// Register theme menus and widget areas
-function greentech_setup() {
+
+// Register theme menus
+function yourtheme_register_menus() {
     register_nav_menus( array(
-        'primary' => __( 'Primary Menu', 'greentech' ),
+        'primary' => __( 'Primary Menu', 'yourtheme' ),
     ) );
 }
-add_action( 'after_setup_theme', 'greentech_setup' );
+add_action( 'after_setup_theme', 'yourtheme_register_menus' );
 
+// Register sidebar
 function greentech_widgets_init() {
     register_sidebar( array(
         'name'          => __( 'Primary Sidebar', 'greentech' ),
@@ -51,4 +53,20 @@ function greentech_widgets_init() {
     ) );
 }
 add_action( 'widgets_init', 'greentech_widgets_init' );
-//
+
+// Enqueue theme styles and menu toggle script
+function greentech_enqueue_scripts() {
+    // Main stylesheet
+    wp_enqueue_style( 'greentech-style', get_stylesheet_uri() );
+
+    // Burger menu toggle script
+    wp_enqueue_script(
+        'greentech-menu-toggle',
+        get_template_directory_uri() . '/js/menu-toggle.js',
+        array(), // no dependencies
+        null,    // version (optional)
+        true     // load in footer
+    );
+}
+add_action( 'wp_enqueue_scripts', 'greentech_enqueue_scripts' );
+

@@ -2775,75 +2775,130 @@ body.single #footer {
   text-align: center;
 }
 
-/* Menu */
+/* --- Off-canvas Menu Styling --- */
 #menu {
   transform: translateX(25em);
-  transition: transform 0.5s ease, visibility 0.5s;
-  -webkit-overflow-scrolling: touch;
-  background: #ffffff;
-  border-left: solid 1px rgba(160, 160, 160, 0.3);
-  box-shadow: none;
-  height: 100%;
-  max-width: 80%;
-  overflow-y: auto;
+  transition: transform 0.4s ease, visibility 0.4s ease;
   position: fixed;
   right: 0;
   top: 0;
-  visibility: hidden;
+  height: 100%;
   width: 25em;
+  max-width: 85%;
+  background: #fff;
+  border-left: 1px solid rgba(160, 160, 160, 0.25);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+  visibility: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   z-index: 10002;
 }
-#menu > * {
-  border-top: solid 1px rgba(160, 160, 160, 0.3);
-  padding: 3em;
-}
-#menu > * > :last-child {
-  margin-bottom: 0;
-}
-#menu > :first-child {
-  border-top: 0;
-}
-#menu .links {
-  list-style: none;
-  padding: 0;
-}
-#menu .links > li {
-  border: 0;
-  border-top: dotted 1px rgba(160, 160, 160, 0.3);
-  margin: 1.5em 0 0 0;
-  padding: 1.5em 0 0 0;
-}
-#menu .links > li a {
-  display: block;
-  border-bottom: 0;
-}
-#menu .links > li a h3 {
-  transition: color 0.2s ease;
-  font-size: 0.7em;
-}
-#menu .links > li a p {
-  font-family: "Raleway", Helvetica, sans-serif;
-  font-size: 0.6em;
-  font-weight: 400;
-  letter-spacing: 0.25em;
-  margin-bottom: 0;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-#menu .links > li a:hover h3 {
-  color: #2ebaae;
-}
-#menu .links > li:first-child {
-  border-top: 0;
-  margin-top: 0;
-  padding-top: 0;
-}
+
 body.is-menu-visible #menu {
   transform: translateX(0);
   visibility: visible;
 }
+
+/* --- Inner sections --- */
+#menu > * {
+  padding: 2.5em 2em;
+  border-top: 1px solid rgba(160, 160, 160, 0.2);
+}
+#menu > :first-child {
+  border-top: none;
+}
+
+/* --- Search --- */
+#menu form.search {
+  display: flex;
+  align-items: center;
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  padding: 0.75em 1em;
+  border-radius: 4px;
+}
+#menu form.search input[type="text"] {
+  border: none;
+  background: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.9em;
+  color: #333;
+}
+
+/* --- Links list --- */
+#menu .links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#menu .links > li {
+  padding: 1.5em 0;
+  border-top: 1px dotted rgba(160, 160, 160, 0.3);
+}
+#menu .links > li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+#menu .links > li a {
+  text-decoration: none;
+  display: block;
+}
+#menu .links > li a h3 {
+  font-size: 0.85em;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #111;
+  margin-bottom: 0.25em;
+  transition: color 0.2s ease;
+}
+#menu .links > li a p {
+  font-size: 0.7em;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin: 0;
+}
+#menu .links > li a:hover h3 {
+  color: #2ebaae;
+}
+
+/* --- Buttons inside menu (like “Log in”) --- */
+#menu .button,
+#menu button {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.9em 1em;
+  border: 1px solid #ccc;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: none;
+  color: #111;
+  transition: all 0.2s ease;
+}
+#menu .button:hover,
+#menu button:hover {
+  border-color: #2ebaae;
+  color: #2ebaae;
+}
+
+/* --- Scrollbar (for webkit browsers) --- */
+#menu::-webkit-scrollbar {
+  width: 6px;
+}
+#menu::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+#menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* --- Mobile adjustments --- */
 @media screen and (max-width: 736px) {
   #menu > * {
     padding: 1.5em;
   }
-}/*# sourceMappingURL=main.css.map */
+}
